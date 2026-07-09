@@ -5,6 +5,7 @@ export type Friend = {
   defaultStrokes?: number; // starting strokes for a new entry; positive = recibes, negative = das
   montoApuesta?: string; // reference note, e.g. "$50 $50 $100"
   montoMarcas?: string; // reference note, e.g. "$25"
+  montoMedal?: string; // reference note, e.g. "$10"
   notas?: string; // e.g. "Carry no se ajusta"
 };
 
@@ -33,6 +34,7 @@ export type Team = {
   defaultStrokes?: number; // starting strokes for a new entry; positive = recibe tu equipo, negative = da tu equipo
   montoApuesta?: string;
   montoMarcas?: string;
+  montoMedal?: string;
   notas?: string;
 };
 

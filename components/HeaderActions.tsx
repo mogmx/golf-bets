@@ -6,7 +6,13 @@ export function HeaderActions() {
   const router = useRouter();
   return (
     <View style={styles.row}>
-      <TouchableOpacity onPress={() => Keyboard.dismiss()} style={styles.button}>
+      <TouchableOpacity
+        onPress={() => {
+          Keyboard.dismiss();
+          router.replace('/');
+        }}
+        style={styles.button}
+      >
         <Text style={styles.text}>Listo</Text>
       </TouchableOpacity>
       <TouchableOpacity onPress={() => router.replace('/')} style={styles.button}>

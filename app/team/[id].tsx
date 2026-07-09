@@ -32,6 +32,7 @@ export default function TeamDetailScreen() {
   const [defaultStrokesText, setDefaultStrokesText] = useState(formatSigned(team?.defaultStrokes ?? 0));
   const [montoApuesta, setMontoApuesta] = useState(team?.montoApuesta ?? '');
   const [montoMarcas, setMontoMarcas] = useState(team?.montoMarcas ?? '');
+  const [montoMedal, setMontoMedal] = useState(team?.montoMedal ?? '');
   const [notas, setNotas] = useState(team?.notas ?? '');
 
   if (!team) {
@@ -136,6 +137,18 @@ export default function TeamDetailScreen() {
           onChangeText={(t) => {
             setMontoMarcas(t);
             updateTeam(team.id, { montoMarcas: t });
+          }}
+        />
+
+        <Text style={styles.label}>Monto Medal</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="$10"
+          placeholderTextColor={colors.textMuted}
+          value={montoMedal}
+          onChangeText={(t) => {
+            setMontoMedal(t);
+            updateTeam(team.id, { montoMedal: t });
           }}
         />
 

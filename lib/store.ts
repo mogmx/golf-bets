@@ -13,7 +13,7 @@ type Store = {
   addFriend: (name: string) => Friend;
   updateFriend: (
     id: string,
-    patch: Partial<Pick<Friend, 'name' | 'hcp' | 'defaultStrokes' | 'montoApuesta' | 'montoMarcas' | 'notas'>>
+    patch: Partial<Pick<Friend, 'name' | 'hcp' | 'defaultStrokes' | 'montoApuesta' | 'montoMarcas' | 'montoMedal' | 'notas'>>
   ) => void;
   deleteFriend: (id: string) => void;
 
@@ -25,7 +25,17 @@ type Store = {
   updateTeam: (
     id: string,
     patch: Partial<
-      Pick<Team, 'partnerName' | 'opponent1Id' | 'opponent2Id' | 'defaultStrokes' | 'montoApuesta' | 'montoMarcas' | 'notas'>
+      Pick<
+        Team,
+        | 'partnerName'
+        | 'opponent1Id'
+        | 'opponent2Id'
+        | 'defaultStrokes'
+        | 'montoApuesta'
+        | 'montoMarcas'
+        | 'montoMedal'
+        | 'notas'
+      >
     >
   ) => void;
   deleteTeam: (id: string) => void;
