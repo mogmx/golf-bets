@@ -3,11 +3,13 @@
     "name": "golf-bets",
     "slug": "golf-bets",
     "version": "1.0.0",
+    "scheme": "golfbets",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.marianaortiz.golfbets"
     },
     "android": {
       "adaptiveIcon": {
@@ -20,6 +22,16 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "plugins": [
+      "expo-router"
+    ],
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "bec5c1a5-fcf9-4de6-b550-a326b8809601"
+      }
+    },
+    "owner": "mogmx"
   }
 }
