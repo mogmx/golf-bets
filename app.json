@@ -21,7 +21,8 @@
       "predictiveBackGestureEnabled": false
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      "favicon": "./assets/favicon.png",
+      "output": "single"
     },
     "plugins": [
       "expo-router"
@@ -32,6 +33,9 @@
         "projectId": "bec5c1a5-fcf9-4de6-b550-a326b8809601"
       }
     },
-    "owner": "mogmx"
+    "owner": "mogmx",
+    "experiments": {
+      "baseUrl": "/golf-bets"
+    }
   }
 }

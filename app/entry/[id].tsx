@@ -1,10 +1,9 @@
-import DateTimePicker from '@react-native-community/datetimepicker';
 import { Stack, useLocalSearchParams } from 'expo-router';
 import { useState } from 'react';
-import { Platform, ScrollView, StyleSheet, Switch, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { ScrollView, StyleSheet, Switch, Text, TextInput, View } from 'react-native';
+import { DatePickerField } from '../../components/DatePickerField';
 import { HeaderActions } from '../../components/HeaderActions';
 import { colors } from '../../lib/colors';
-import { formatDate } from '../../lib/date';
 import { entryTotal, nextStrokes } from '../../lib/scoring';
 import { useStore } from '../../lib/store';
 import { Entry } from '../../lib/types';
@@ -64,8 +63,6 @@ export default function EntryScreen() {
   const friend = useStore((s) => s.friends.find((f) => f.id === entry?.friendId));
   const updateEntry = useStore((s) => s.updateEntry);
 
-  const [showPicker, setShowPicker] = useState(false);
-
   if (!entry) {
     return (
       <View style={styles.container}>
@@ -77,8 +74,6 @@ export default function EntryScreen() {
   const patch = (p: Partial<Entry>) => updateEntry(entry.id, p);
   const total = entryTotal(entry);
   const positive = total >= 0;
-  const [y, m, d] = entry.fecha.split('-').map(Number);
-  const dateObj = new Date(y, (m ?? 1) - 1, d ?? 1);
 
   return (
     <ScrollView style={styles.container} keyboardShouldPersistTaps="handled">
@@ -91,28 +86,7 @@ export default function EntryScreen() {
 
       <Text style={styles.title}>vs {friend?.name ?? 'Amigo'}</Text>
 
-      <Text style={styles.label}>Fecha</Text>
-      <TouchableOpacity style={styles.input} onPress={() => setShowPicker(true)}>
-        <Text style={{ color: colors.text }}>{formatDate(entry.fecha)}</Text>
-      </TouchableOpacity>
-      {showPicker && (
-        <>
-          <DateTimePicker
-            value={dateObj}
-            mode="date"
-            display={Platform.OS === 'ios' ? 'spinner' : 'default'}
-            onChange={(_event, selected) => {
-              if (Platform.OS === 'android') setShowPicker(false);
-              if (selected) patch({ fecha: selected.toISOString().slice(0, 10) });
-            }}
-          />
-          {Platform.OS === 'ios' && (
-            <TouchableOpacity style={styles.doneButton} onPress={() => setShowPicker(false)}>
-              <Text style={styles.doneButtonText}>Listo</Text>
-            </TouchableOpacity>
-          )}
-        </>
-      )}
+      <DatePickerField value={entry.fecha} onChange={(iso) => patch({ fecha: iso })} />
 
       <ToggleRow label="Match" value={entry.match} onChange={(v) => patch({ match: v })} />
 
@@ -160,8 +134,6 @@ const styles = StyleSheet.create({
   title: { fontSize: 20, fontWeight: '700', color: colors.text, marginBottom: 8 },
   sectionTitle: { fontSize: 15, fontWeight: '700', color: colors.text, marginTop: 20, marginBottom: 8 },
   row2: { flexDirection: 'row', gap: 8 },
-  doneButton: { alignSelf: 'flex-end', paddingVertical: 8, paddingHorizontal: 16, marginBottom: 8 },
-  doneButtonText: { color: colors.primary, fontWeight: '700', fontSize: 15 },
   input: {
     backgroundColor: colors.card,
     borderColor: colors.border,
