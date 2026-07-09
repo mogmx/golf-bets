@@ -1,7 +1,8 @@
 import { useRouter } from 'expo-router';
 import { useMemo, useState } from 'react';
-import { Alert, FlatList, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { FlatList, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { colors } from '../../lib/colors';
+import { confirmDelete } from '../../lib/confirm';
 import { currentStrokes, friendLifetimeTotal } from '../../lib/scoring';
 import { useStore } from '../../lib/store';
 
@@ -33,10 +34,7 @@ export default function FriendsScreen() {
   };
 
   const handleDelete = (id: string, name: string) => {
-    Alert.alert('Eliminar amigo', `¿Eliminar a ${name} y todo su historial?`, [
-      { text: 'Cancelar', style: 'cancel' },
-      { text: 'Eliminar', style: 'destructive', onPress: () => deleteFriend(id) },
-    ]);
+    confirmDelete('Eliminar amigo', `¿Eliminar a ${name} y todo su historial?`, () => deleteFriend(id));
   };
 
   return (

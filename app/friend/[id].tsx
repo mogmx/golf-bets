@@ -1,8 +1,9 @@
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
 import { useMemo, useState } from 'react';
-import { Alert, FlatList, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { FlatList, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { HeaderActions } from '../../components/HeaderActions';
 import { colors } from '../../lib/colors';
+import { confirmDelete } from '../../lib/confirm';
 import { formatDate, todayISO } from '../../lib/date';
 import { entryTotal, friendLifetimeTotal, nextStrokes, teamLifetimeTotal } from '../../lib/scoring';
 import { useStore } from '../../lib/store';
@@ -61,17 +62,10 @@ export default function FriendDetailScreen() {
   };
 
   const handleDeleteFriend = () => {
-    Alert.alert('Eliminar amigo', `Esto eliminará a ${friend.name} y todo su historial.`, [
-      { text: 'Cancelar', style: 'cancel' },
-      {
-        text: 'Eliminar',
-        style: 'destructive',
-        onPress: () => {
-          deleteFriend(friend.id);
-          router.back();
-        },
-      },
-    ]);
+    confirmDelete('Eliminar amigo', `Esto eliminará a ${friend.name} y todo su historial.`, () => {
+      deleteFriend(friend.id);
+      router.back();
+    });
   };
 
   return (
@@ -197,10 +191,9 @@ export default function FriendDetailScreen() {
                 style={styles.entryCard}
                 onPress={() => router.push(`/entry/${item.id}`)}
                 onLongPress={() =>
-                  Alert.alert('Eliminar entrada', `¿Eliminar la entrada del ${formatDate(item.fecha)}?`, [
-                    { text: 'Cancelar', style: 'cancel' },
-                    { text: 'Eliminar', style: 'destructive', onPress: () => deleteEntry(item.id) },
-                  ])
+                  confirmDelete('Eliminar entrada', `¿Eliminar la entrada del ${formatDate(item.fecha)}?`, () =>
+                    deleteEntry(item.id)
+                  )
                 }
               >
                 <View style={styles.entryHeaderRow}>

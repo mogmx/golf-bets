@@ -1,8 +1,9 @@
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
 import { useMemo, useState } from 'react';
-import { Alert, FlatList, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { FlatList, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { HeaderActions } from '../../components/HeaderActions';
 import { colors } from '../../lib/colors';
+import { confirmDelete } from '../../lib/confirm';
 import { formatDate, todayISO } from '../../lib/date';
 import { nextTeamStrokes, teamEntryTotal, teamLifetimeTotal } from '../../lib/scoring';
 import { useStore } from '../../lib/store';
@@ -56,17 +57,10 @@ export default function TeamDetailScreen() {
   };
 
   const handleDeleteTeam = () => {
-    Alert.alert('Eliminar equipo', 'Esto eliminará el equipo y todo su historial.', [
-      { text: 'Cancelar', style: 'cancel' },
-      {
-        text: 'Eliminar',
-        style: 'destructive',
-        onPress: () => {
-          deleteTeam(team.id);
-          router.back();
-        },
-      },
-    ]);
+    confirmDelete('Eliminar equipo', 'Esto eliminará el equipo y todo su historial.', () => {
+      deleteTeam(team.id);
+      router.back();
+    });
   };
 
   return (
@@ -178,10 +172,9 @@ export default function TeamDetailScreen() {
                 style={styles.entryCard}
                 onPress={() => router.push(`/teamEntry/${item.id}`)}
                 onLongPress={() =>
-                  Alert.alert('Eliminar entrada', `¿Eliminar la entrada del ${formatDate(item.fecha)}?`, [
-                    { text: 'Cancelar', style: 'cancel' },
-                    { text: 'Eliminar', style: 'destructive', onPress: () => deleteTeamEntry(item.id) },
-                  ])
+                  confirmDelete('Eliminar entrada', `¿Eliminar la entrada del ${formatDate(item.fecha)}?`, () =>
+                    deleteTeamEntry(item.id)
+                  )
                 }
               >
                 <View style={styles.entryHeaderRow}>

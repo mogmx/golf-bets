@@ -1,7 +1,8 @@
 import { useRouter } from 'expo-router';
 import { useMemo, useState } from 'react';
-import { Alert, FlatList, Modal, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { FlatList, Modal, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { colors } from '../../lib/colors';
+import { confirmDelete, showAlert } from '../../lib/confirm';
 import { currentTeamStrokes, teamLifetimeTotal } from '../../lib/scoring';
 import { useStore } from '../../lib/store';
 
@@ -63,7 +64,7 @@ export default function EquiposScreen() {
 
   const handleCreate = () => {
     if (!partnerName.trim() || !opponent1Id || !opponent2Id) {
-      Alert.alert('Faltan datos', 'Ingresa tu pareja y selecciona 2 oponentes.');
+      showAlert('Faltan datos', 'Ingresa tu pareja y selecciona 2 oponentes.');
       return;
     }
     const team = addTeam(partnerName.trim(), opponent1Id, opponent2Id);
@@ -72,10 +73,7 @@ export default function EquiposScreen() {
   };
 
   const handleDelete = (id: string) => {
-    Alert.alert('Eliminar equipo', '¿Eliminar este equipo y todo su historial?', [
-      { text: 'Cancelar', style: 'cancel' },
-      { text: 'Eliminar', style: 'destructive', onPress: () => deleteTeam(id) },
-    ]);
+    confirmDelete('Eliminar equipo', '¿Eliminar este equipo y todo su historial?', () => deleteTeam(id));
   };
 
   return (
