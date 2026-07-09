@@ -25,9 +25,20 @@ jobs:
           eas-version: latest
           token: ${{ secrets.EXPO_TOKEN }}
 
+      - name: Install expect
+        run: sudo apt-get update && sudo apt-get install -y expect
+
       - name: Generate device registration link
         env:
           EXPO_APPLE_ID: ${{ secrets.EXPO_APPLE_ID }}
           EXPO_APPLE_APP_SPECIFIC_PASSWORD: ${{ secrets.EXPO_APPLE_APP_SPECIFIC_PASSWORD }}
           EXPO_APPLE_TEAM_ID: ${{ secrets.EXPO_APPLE_TEAM_ID }}
-        run: eas device:create --non-interactive
+        run: |
+          cat > /tmp/device_create.exp << 'EXPECTEOF'
+          set timeout 120
+          spawn eas device:create
+          expect "Would you like to use the mogmx account?"
+          send "y\r"
+          expect eof
+          EXPECTEOF
+          expect -f /tmp/device_create.exp
