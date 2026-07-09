@@ -35,10 +35,15 @@ jobs:
           EXPO_APPLE_TEAM_ID: ${{ secrets.EXPO_APPLE_TEAM_ID }}
         run: |
           cat > /tmp/device_create.exp << 'EXPECTEOF'
+          log_user 1
           set timeout 120
           spawn eas device:create
           expect "Would you like to use the mogmx account?"
           send "y\r"
+          expect "Password (for*"
+          log_user 0
+          send "$env(EXPO_APPLE_APP_SPECIFIC_PASSWORD)\r"
+          log_user 1
           expect eof
           EXPECTEOF
           expect -f /tmp/device_create.exp
