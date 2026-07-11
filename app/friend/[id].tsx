@@ -200,6 +200,22 @@ export default function FriendDetailScreen() {
             <Text style={styles.statLabel}>Marcas (G-P)</Text>
           </View>
         </View>
+        <View style={styles.statsRow}>
+          <View style={styles.statBox}>
+            <Text style={[styles.statValue, { color: stats.marcasBalance >= 0 ? colors.positive : colors.negative }]}>
+              {stats.marcasBalance >= 0 ? '+' : ''}
+              {stats.marcasBalance.toFixed(2)}
+            </Text>
+            <Text style={styles.statLabel}>Marcas $</Text>
+          </View>
+          <View style={styles.statBox}>
+            <Text style={[styles.statValue, { color: stats.medalBalance >= 0 ? colors.positive : colors.negative }]}>
+              {stats.medalBalance >= 0 ? '+' : ''}
+              {stats.medalBalance.toFixed(2)}
+            </Text>
+            <Text style={styles.statLabel}>Medal $</Text>
+          </View>
+        </View>
         <Text style={styles.label}>Balance</Text>
         <BalanceChart points={stats.balancePoints} />
 
