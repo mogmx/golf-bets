@@ -1,11 +1,13 @@
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
 import { useMemo, useState } from 'react';
 import { FlatList, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { BalanceChart } from '../../components/BalanceChart';
 import { HeaderActions } from '../../components/HeaderActions';
 import { colors } from '../../lib/colors';
 import { confirmDelete } from '../../lib/confirm';
 import { formatDate, todayISO } from '../../lib/date';
 import { nextTeamStrokes, teamEntryTotal, teamLifetimeTotal } from '../../lib/scoring';
+import { computeTeamStats } from '../../lib/stats';
 import { useStore } from '../../lib/store';
 
 function formatSigned(n: number): string {
@@ -28,6 +30,8 @@ export default function TeamDetailScreen() {
     () => allEntries.filter((e) => e.teamId === id).sort((a, b) => (a.fecha < b.fecha ? 1 : -1)),
     [allEntries, id]
   );
+
+  const stats = useMemo(() => computeTeamStats(entries), [entries]);
 
   const [partnerName, setPartnerName] = useState(team?.partnerName ?? '');
   const [defaultStrokesText, setDefaultStrokesText] = useState(formatSigned(team?.defaultStrokes ?? 0));
@@ -158,6 +162,24 @@ export default function TeamDetailScreen() {
           }}
         />
 
+        <Text style={styles.sectionTitle}>Stats</Text>
+        <View style={styles.statsRow}>
+          <View style={styles.statBox}>
+            <Text style={styles.statValue}>{stats.roundsPlayed}</Text>
+            <Text style={styles.statLabel}>Rondas jugadas</Text>
+          </View>
+          <View style={styles.statBox}>
+            <Text style={styles.statValue}>{stats.matchWins}-{stats.matchLosses}</Text>
+            <Text style={styles.statLabel}>Match (G-P)</Text>
+          </View>
+          <View style={styles.statBox}>
+            <Text style={styles.statValue}>{stats.marcasWins}-{stats.marcasLosses}</Text>
+            <Text style={styles.statLabel}>Marcas (G-P)</Text>
+          </View>
+        </View>
+        <Text style={styles.label}>Balance</Text>
+        <BalanceChart points={stats.balancePoints} />
+
         <Text style={styles.sectionTitle}>Historial</Text>
         <FlatList
           data={entries}
@@ -243,6 +265,18 @@ const styles = StyleSheet.create({
     color: colors.text,
   },
   sectionTitle: { fontSize: 15, fontWeight: '700', color: colors.text, marginTop: 20, marginBottom: 8 },
+  statsRow: { flexDirection: 'row', gap: 8 },
+  statBox: {
+    flex: 1,
+    backgroundColor: colors.card,
+    borderColor: colors.border,
+    borderWidth: 1,
+    borderRadius: 8,
+    paddingVertical: 10,
+    alignItems: 'center',
+  },
+  statValue: { fontSize: 18, fontWeight: '800', color: colors.text },
+  statLabel: { fontSize: 10, color: colors.textMuted, marginTop: 2, textAlign: 'center' },
   entryCard: {
     backgroundColor: colors.card,
     borderRadius: 8,
