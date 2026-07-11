@@ -102,8 +102,8 @@ export default function TeamEntryScreen() {
 
       <Text style={styles.sectionTitle}>Resultado</Text>
       <View style={styles.row2}>
-        <NumberField label="Ganado ($)" value={entry.ganado} onChangeValue={(n) => patch({ ganado: n })} />
-        <NumberField label="Perdido ($)" value={entry.perdido} onChangeValue={(n) => patch({ perdido: n })} />
+        <NumberField label="Match Ganado ($)" value={entry.ganado} onChangeValue={(n) => patch({ ganado: n })} />
+        <NumberField label="Match Perdido ($)" value={entry.perdido} onChangeValue={(n) => patch({ perdido: n })} />
       </View>
       <View style={{ height: 8 }} />
       <View style={styles.row2}>

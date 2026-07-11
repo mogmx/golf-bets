@@ -11,8 +11,10 @@ export type Stats = {
   marcasWins: number;
   marcasLosses: number;
   marcasTies: number;
+  matchBalance: number;
   marcasBalance: number;
   medalBalance: number;
+  totalBalance: number;
   balancePoints: BalancePoint[]; // cumulative balance, sorted oldest to newest
 };
 
@@ -31,6 +33,7 @@ export function computeStats(entries: Entry[]): Stats {
   let marcasWins = 0;
   let marcasLosses = 0;
   let marcasTies = 0;
+  let matchBalance = 0;
   let marcasBalance = 0;
   let medalBalance = 0;
   for (const e of entries) {
@@ -42,6 +45,7 @@ export function computeStats(entries: Entry[]): Stats {
     else if (e.marcasPerdido > e.marcasGanado) marcasLosses++;
     else marcasTies++;
 
+    matchBalance += e.ganado - e.perdido;
     marcasBalance += e.marcasGanado - e.marcasPerdido;
     medalBalance += e.medalGanado - e.medalPerdido;
   }
@@ -54,8 +58,10 @@ export function computeStats(entries: Entry[]): Stats {
     marcasWins,
     marcasLosses,
     marcasTies,
+    matchBalance,
     marcasBalance,
     medalBalance,
+    totalBalance: matchBalance + marcasBalance + medalBalance,
     balancePoints,
   };
 }
@@ -76,6 +82,7 @@ export function computeTeamStats(entries: TeamEntry[]): Stats {
   let marcasWins = 0;
   let marcasLosses = 0;
   let marcasTies = 0;
+  let matchBalance = 0;
   let marcasBalance = 0;
   let medalBalance = 0;
   for (const e of entries) {
@@ -87,6 +94,7 @@ export function computeTeamStats(entries: TeamEntry[]): Stats {
     else if (e.marcasPerdido > e.marcasGanado) marcasLosses++;
     else marcasTies++;
 
+    matchBalance += e.ganado - e.perdido;
     marcasBalance += e.marcasGanado - e.marcasPerdido;
     medalBalance += e.medalGanado - e.medalPerdido;
   }
@@ -99,8 +107,10 @@ export function computeTeamStats(entries: TeamEntry[]): Stats {
     marcasWins,
     marcasLosses,
     marcasTies,
+    matchBalance,
     marcasBalance,
     medalBalance,
+    totalBalance: matchBalance + marcasBalance + medalBalance,
     balancePoints,
   };
 }

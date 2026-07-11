@@ -179,18 +179,34 @@ export default function TeamDetailScreen() {
         </View>
         <View style={styles.statsRow}>
           <View style={styles.statBox}>
+            <Text style={[styles.statValue, { color: stats.matchBalance >= 0 ? colors.positive : colors.negative }]}>
+              {stats.matchBalance >= 0 ? '+' : ''}
+              {stats.matchBalance.toFixed(2)}
+            </Text>
+            <Text style={styles.statLabel}>Total Match</Text>
+          </View>
+          <View style={styles.statBox}>
             <Text style={[styles.statValue, { color: stats.marcasBalance >= 0 ? colors.positive : colors.negative }]}>
               {stats.marcasBalance >= 0 ? '+' : ''}
               {stats.marcasBalance.toFixed(2)}
             </Text>
-            <Text style={styles.statLabel}>Marcas $</Text>
+            <Text style={styles.statLabel}>Total Marcas</Text>
           </View>
+        </View>
+        <View style={styles.statsRow}>
           <View style={styles.statBox}>
             <Text style={[styles.statValue, { color: stats.medalBalance >= 0 ? colors.positive : colors.negative }]}>
               {stats.medalBalance >= 0 ? '+' : ''}
               {stats.medalBalance.toFixed(2)}
             </Text>
-            <Text style={styles.statLabel}>Medal $</Text>
+            <Text style={styles.statLabel}>Total Medal</Text>
+          </View>
+          <View style={styles.statBox}>
+            <Text style={[styles.statValue, { color: stats.totalBalance >= 0 ? colors.positive : colors.negative }]}>
+              {stats.totalBalance >= 0 ? '+' : ''}
+              {stats.totalBalance.toFixed(2)}
+            </Text>
+            <Text style={styles.statLabel}>Total</Text>
           </View>
         </View>
         <Text style={styles.label}>Balance</Text>
