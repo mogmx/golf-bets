@@ -19,8 +19,10 @@ export type Entry = {
 
   ganado: number;
   perdido: number;
-  marcas: number;
-  medal: number;
+  marcasGanado: number;
+  marcasPerdido: number;
+  medalGanado: number;
+  medalPerdido: number;
 
   carry: boolean; // SI/NO
   carryAjusta?: boolean; // SI/NO - if a carry happened, whether strokes still slide (default NO = don't adjust)
@@ -48,8 +50,10 @@ export type TeamEntry = {
 
   ganado: number;
   perdido: number;
-  marcas: number;
-  medal: number;
+  marcasGanado: number;
+  marcasPerdido: number;
+  medalGanado: number;
+  medalPerdido: number;
 
   carry: boolean; // SI/NO
   carryAjusta?: boolean; // SI/NO

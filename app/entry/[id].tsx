@@ -101,8 +101,29 @@ export default function EntryScreen() {
       </View>
       <View style={{ height: 8 }} />
       <View style={styles.row2}>
-        <NumberField label="Marcas ($)" value={entry.marcas} onChangeValue={(n) => patch({ marcas: n })} />
-        <NumberField label="Medal ($)" value={entry.medal} onChangeValue={(n) => patch({ medal: n })} />
+        <NumberField
+          label="Marcas Ganado ($)"
+          value={entry.marcasGanado}
+          onChangeValue={(n) => patch({ marcasGanado: n })}
+        />
+        <NumberField
+          label="Marcas Perdido ($)"
+          value={entry.marcasPerdido}
+          onChangeValue={(n) => patch({ marcasPerdido: n })}
+        />
+      </View>
+      <View style={{ height: 8 }} />
+      <View style={styles.row2}>
+        <NumberField
+          label="Medal Ganado ($)"
+          value={entry.medalGanado}
+          onChangeValue={(n) => patch({ medalGanado: n })}
+        />
+        <NumberField
+          label="Medal Perdido ($)"
+          value={entry.medalPerdido}
+          onChangeValue={(n) => patch({ medalPerdido: n })}
+        />
       </View>
 
       <ToggleRow label="Carry" value={entry.carry} onChange={(v) => patch({ carry: v })} />

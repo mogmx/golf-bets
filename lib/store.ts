@@ -77,8 +77,10 @@ export const useStore = create<Store>()(
           strokes: initialStrokes,
           ganado: 0,
           perdido: 0,
-          marcas: 0,
-          medal: 0,
+          marcasGanado: 0,
+          marcasPerdido: 0,
+          medalGanado: 0,
+          medalPerdido: 0,
           carry: false,
           carryAjusta: false,
         };
@@ -116,8 +118,10 @@ export const useStore = create<Store>()(
           strokes: initialStrokes,
           ganado: 0,
           perdido: 0,
-          marcas: 0,
-          medal: 0,
+          marcasGanado: 0,
+          marcasPerdido: 0,
+          medalGanado: 0,
+          medalPerdido: 0,
           carry: false,
           carryAjusta: false,
         };
@@ -134,6 +138,22 @@ export const useStore = create<Store>()(
     {
       name: 'golf-bets-storage-v3',
       storage: createJSONStorage(() => AsyncStorage),
+      version: 2,
+      migrate: (persistedState: any, version) => {
+        if (version < 2) {
+          const migrateEntries = (entries: any[]) =>
+            (entries ?? []).map((e) => ({
+              ...e,
+              marcasGanado: e.marcasGanado ?? e.marcas ?? 0,
+              marcasPerdido: e.marcasPerdido ?? 0,
+              medalGanado: e.medalGanado ?? e.medal ?? 0,
+              medalPerdido: e.medalPerdido ?? 0,
+            }));
+          persistedState.entries = migrateEntries(persistedState.entries);
+          persistedState.teamEntries = migrateEntries(persistedState.teamEntries);
+        }
+        return persistedState;
+      },
     }
   )
 );

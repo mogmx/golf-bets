@@ -210,8 +210,14 @@ export default function FriendDetailScreen() {
                   </Text>
                   <Text style={styles.entryDetail}>Ganado: ${item.ganado.toFixed(2)}</Text>
                   <Text style={styles.entryDetail}>Perdido: ${item.perdido.toFixed(2)}</Text>
-                  <Text style={styles.entryDetail}>Marcas: ${item.marcas.toFixed(2)}</Text>
-                  <Text style={styles.entryDetail}>Medal: ${item.medal.toFixed(2)}</Text>
+                  <Text style={styles.entryDetail}>
+                    Marcas: {item.marcasGanado - item.marcasPerdido >= 0 ? '+' : ''}
+                    {(item.marcasGanado - item.marcasPerdido).toFixed(2)}
+                  </Text>
+                  <Text style={styles.entryDetail}>
+                    Medal: {item.medalGanado - item.medalPerdido >= 0 ? '+' : ''}
+                    {(item.medalGanado - item.medalPerdido).toFixed(2)}
+                  </Text>
                   <Text style={styles.entryDetail}>Carry: {item.carry ? 'SI' : 'NO'}</Text>
                   {item.carry && (
                     <Text style={styles.entryDetail}>Carry Ajusta: {item.carryAjusta ? 'SI' : 'NO'}</Text>

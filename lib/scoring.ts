@@ -1,7 +1,12 @@
 import { Entry, TeamEntry } from './types';
 
 export function entryTotal(entry: Entry): number {
-  return entry.ganado - entry.perdido + entry.marcas + entry.medal;
+  return (
+    entry.ganado -
+    entry.perdido +
+    (entry.marcasGanado - entry.marcasPerdido) +
+    (entry.medalGanado - entry.medalPerdido)
+  );
 }
 
 export function friendLifetimeTotal(entries: Entry[], friendId: string): number {
@@ -32,7 +37,12 @@ export function currentStrokes(entries: Entry[], friendId: string, defaultStroke
 
 // Same as above, duplicated for teams (2 vs 2).
 export function teamEntryTotal(entry: TeamEntry): number {
-  return entry.ganado - entry.perdido + entry.marcas + entry.medal;
+  return (
+    entry.ganado -
+    entry.perdido +
+    (entry.marcasGanado - entry.marcasPerdido) +
+    (entry.medalGanado - entry.medalPerdido)
+  );
 }
 
 export function teamLifetimeTotal(entries: TeamEntry[], teamId: string): number {
