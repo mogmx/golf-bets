@@ -23,13 +23,15 @@ export default function EquiposScreen() {
 
   const teamRows = useMemo(
     () =>
-      teams.map((t) => ({
-        team: t,
-        opponent1: friends.find((f) => f.id === t.opponent1Id),
-        opponent2: friends.find((f) => f.id === t.opponent2Id),
-        total: teamLifetimeTotal(teamEntries, t.id),
-        strokes: currentTeamStrokes(teamEntries, t.id, t.defaultStrokes ?? 0),
-      })),
+      [...teams]
+        .sort((a, b) => a.partnerName.localeCompare(b.partnerName))
+        .map((t) => ({
+          team: t,
+          opponent1: friends.find((f) => f.id === t.opponent1Id),
+          opponent2: friends.find((f) => f.id === t.opponent2Id),
+          total: teamLifetimeTotal(teamEntries, t.id),
+          strokes: currentTeamStrokes(teamEntries, t.id, t.defaultStrokes ?? 0),
+        })),
     [teams, friends, teamEntries]
   );
 
