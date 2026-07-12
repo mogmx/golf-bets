@@ -33,6 +33,8 @@ export default function EquiposScreen() {
     [teams, friends, teamEntries]
   );
 
+  const grandTotal = useMemo(() => teamRows.reduce((sum, r) => sum + r.total, 0), [teamRows]);
+
   const openModal = () => {
     setPartnerName('');
     setOpponent1Id(null);
@@ -108,6 +110,19 @@ export default function EquiposScreen() {
             </TouchableOpacity>
           );
         }}
+        ListFooterComponent={
+          teamRows.length > 0 ? (
+            <View style={styles.footerRow}>
+              <Text style={styles.footerLabel}>Total</Text>
+              <Text
+                style={[styles.footerTotal, { color: grandTotal >= 0 ? colors.positive : colors.negative }]}
+              >
+                {grandTotal >= 0 ? '+' : ''}
+                {grandTotal.toFixed(2)}
+              </Text>
+            </View>
+          ) : null
+        }
       />
 
       <TouchableOpacity style={styles.newButton} onPress={openModal}>
@@ -193,6 +208,17 @@ const styles = StyleSheet.create({
   rowName: { fontSize: 16, fontWeight: '700', color: colors.text },
   rowSub: { fontSize: 12, color: colors.textMuted, marginTop: 2 },
   rowTotal: { fontSize: 18, fontWeight: '800' },
+  footerRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginTop: 8,
+    paddingTop: 14,
+    borderTopWidth: 1,
+    borderTopColor: colors.border,
+  },
+  footerLabel: { fontSize: 16, fontWeight: '700', color: colors.text },
+  footerTotal: { fontSize: 20, fontWeight: '800' },
   newButton: { backgroundColor: colors.primary, borderRadius: 8, paddingVertical: 14, alignItems: 'center', marginTop: 12 },
   newButtonText: { color: '#fff', fontWeight: '700', fontSize: 16 },
   label: { fontSize: 13, color: colors.textMuted, marginTop: 8, marginBottom: 4 },
