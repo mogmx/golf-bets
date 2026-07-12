@@ -27,6 +27,8 @@ export default function FriendsScreen() {
     [friends, entries]
   );
 
+  const grandTotal = useMemo(() => friendRows.reduce((sum, r) => sum + r.total, 0), [friendRows]);
+
   const handleAdd = () => {
     const name = newName.trim();
     if (!name) return;
@@ -83,6 +85,19 @@ export default function FriendsScreen() {
             </TouchableOpacity>
           );
         }}
+        ListFooterComponent={
+          friendRows.length > 0 ? (
+            <View style={styles.footerRow}>
+              <Text style={styles.footerLabel}>Total</Text>
+              <Text
+                style={[styles.footerTotal, { color: grandTotal >= 0 ? colors.positive : colors.negative }]}
+              >
+                {grandTotal >= 0 ? '+' : ''}
+                {grandTotal.toFixed(2)}
+              </Text>
+            </View>
+          ) : null
+        }
       />
     </View>
   );
@@ -118,4 +133,15 @@ const styles = StyleSheet.create({
   rowStrokes: { fontSize: 12, color: colors.textMuted, marginTop: 2 },
   rowTotal: { fontSize: 18, fontWeight: '800' },
   empty: { textAlign: 'center', color: colors.textMuted, marginTop: 32 },
+  footerRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginTop: 8,
+    paddingTop: 14,
+    borderTopWidth: 1,
+    borderTopColor: colors.border,
+  },
+  footerLabel: { fontSize: 16, fontWeight: '700', color: colors.text },
+  footerTotal: { fontSize: 20, fontWeight: '800' },
 });
