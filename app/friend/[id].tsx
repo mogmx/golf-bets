@@ -235,6 +235,10 @@ export default function FriendDetailScreen() {
         <Text style={styles.label}>Balance</Text>
         <BalanceChart points={stats.balancePoints} />
 
+        <TouchableOpacity style={styles.newButton} onPress={handleAddEntry}>
+          <Text style={styles.newButtonText}>+ Nueva Entrada</Text>
+        </TouchableOpacity>
+
         <Text style={styles.sectionTitle}>Historial</Text>
         <FlatList
           data={entries}
@@ -286,10 +290,6 @@ export default function FriendDetailScreen() {
             );
           }}
         />
-
-        <TouchableOpacity style={styles.newButton} onPress={handleAddEntry}>
-          <Text style={styles.newButtonText}>+ Nueva Entrada</Text>
-        </TouchableOpacity>
 
         <TouchableOpacity style={styles.deleteButton} onPress={handleDeleteFriend}>
           <Text style={styles.deleteText}>Eliminar Amigo</Text>

@@ -212,6 +212,10 @@ export default function TeamDetailScreen() {
         <Text style={styles.label}>Balance</Text>
         <BalanceChart points={stats.balancePoints} />
 
+        <TouchableOpacity style={styles.newButton} onPress={handleAddEntry}>
+          <Text style={styles.newButtonText}>+ Nueva Entrada</Text>
+        </TouchableOpacity>
+
         <Text style={styles.sectionTitle}>Historial</Text>
         <FlatList
           data={entries}
@@ -263,10 +267,6 @@ export default function TeamDetailScreen() {
             );
           }}
         />
-
-        <TouchableOpacity style={styles.newButton} onPress={handleAddEntry}>
-          <Text style={styles.newButtonText}>+ Nueva Entrada</Text>
-        </TouchableOpacity>
 
         <TouchableOpacity style={styles.deleteButton} onPress={handleDeleteTeam}>
           <Text style={styles.deleteText}>Eliminar Equipo</Text>
