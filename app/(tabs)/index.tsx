@@ -17,11 +17,13 @@ export default function FriendsScreen() {
 
   const friendRows = useMemo(
     () =>
-      friends.map((f) => ({
-        friend: f,
-        total: friendLifetimeTotal(entries, f.id),
-        strokes: currentStrokes(entries, f.id, f.defaultStrokes ?? 0),
-      })),
+      [...friends]
+        .sort((a, b) => a.name.localeCompare(b.name))
+        .map((f) => ({
+          friend: f,
+          total: friendLifetimeTotal(entries, f.id),
+          strokes: currentStrokes(entries, f.id, f.defaultStrokes ?? 0),
+        })),
     [friends, entries]
   );
 
