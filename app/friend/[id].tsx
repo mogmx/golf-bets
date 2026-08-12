@@ -6,7 +6,7 @@ import { HeaderActions } from '../../components/HeaderActions';
 import { colors } from '../../lib/colors';
 import { confirmDelete } from '../../lib/confirm';
 import { formatDate, todayISO } from '../../lib/date';
-import { entryTotal, friendLifetimeTotal, nextStrokes, teamLifetimeTotal } from '../../lib/scoring';
+import { entryTotal, friendLifetimeTotal, mostRecentEntry, nextStrokes, teamLifetimeTotal } from '../../lib/scoring';
 import { computeStats } from '../../lib/stats';
 import { useStore } from '../../lib/store';
 
@@ -41,7 +41,9 @@ export default function FriendDetailScreen() {
   const stats = useMemo(() => computeStats(entries), [entries]);
 
   const [hcp, setHcp] = useState(friend?.hcp ?? '');
-  const [defaultStrokesText, setDefaultStrokesText] = useState(formatSigned(friend?.defaultStrokes ?? 0));
+  const [defaultStrokesText, setDefaultStrokesText] = useState(
+    friend?.defaultStrokes !== undefined ? formatSigned(friend.defaultStrokes) : ''
+  );
   const [montoApuesta, setMontoApuesta] = useState(friend?.montoApuesta ?? '');
   const [montoMarcas, setMontoMarcas] = useState(friend?.montoMarcas ?? '');
   const [montoMedal, setMontoMedal] = useState(friend?.montoMedal ?? '');
@@ -59,7 +61,7 @@ export default function FriendDetailScreen() {
   const positive = total >= 0;
 
   const handleAddEntry = () => {
-    const lastEntry = entries[0];
+    const lastEntry = mostRecentEntry(allEntries, friend.id);
     const initialStrokes = lastEntry ? nextStrokes(lastEntry) : friend.defaultStrokes ?? 0;
     const entry = addEntry(friend.id, todayISO(), initialStrokes);
     router.push(`/entry/${entry.id}`);
@@ -85,7 +87,6 @@ export default function FriendDetailScreen() {
         <Text style={styles.label}>HCP</Text>
         <TextInput
           style={styles.input}
-          placeholder="12.4"
           placeholderTextColor={colors.textMuted}
           value={hcp}
           onChangeText={(t) => {
@@ -98,7 +99,6 @@ export default function FriendDetailScreen() {
         <TextInput
           style={styles.input}
           keyboardType="numbers-and-punctuation"
-          placeholder="0"
           placeholderTextColor={colors.textMuted}
           value={defaultStrokesText}
           onChangeText={(t) => {
@@ -106,14 +106,15 @@ export default function FriendDetailScreen() {
             const n = parseFloat(t);
             updateFriend(friend.id, { defaultStrokes: Number.isFinite(n) ? n : 0 });
           }}
-          onBlur={() => setDefaultStrokesText(formatSigned(friend.defaultStrokes ?? 0))}
+          onBlur={() =>
+            setDefaultStrokesText(friend.defaultStrokes !== undefined ? formatSigned(friend.defaultStrokes) : '')
+          }
         />
         <Text style={styles.hint}>Positivo = recibes strokes. Negativo = das strokes.</Text>
 
         <Text style={styles.label}>Monto Apuesta</Text>
         <TextInput
           style={styles.input}
-          placeholder="$50 $50 $100"
           placeholderTextColor={colors.textMuted}
           value={montoApuesta}
           onChangeText={(t) => {
@@ -125,7 +126,6 @@ export default function FriendDetailScreen() {
         <Text style={styles.label}>Monto Marcas</Text>
         <TextInput
           style={styles.input}
-          placeholder="$25"
           placeholderTextColor={colors.textMuted}
           value={montoMarcas}
           onChangeText={(t) => {
@@ -137,7 +137,6 @@ export default function FriendDetailScreen() {
         <Text style={styles.label}>Monto Medal</Text>
         <TextInput
           style={styles.input}
-          placeholder="$10"
           placeholderTextColor={colors.textMuted}
           value={montoMedal}
           onChangeText={(t) => {
@@ -149,7 +148,6 @@ export default function FriendDetailScreen() {
         <Text style={styles.label}>Notas</Text>
         <TextInput
           style={styles.input}
-          placeholder="Carry no se ajusta"
           placeholderTextColor={colors.textMuted}
           value={notas}
           onChangeText={(t) => {

@@ -6,7 +6,7 @@ import { HeaderActions } from '../../components/HeaderActions';
 import { colors } from '../../lib/colors';
 import { confirmDelete } from '../../lib/confirm';
 import { formatDate, todayISO } from '../../lib/date';
-import { nextTeamStrokes, teamEntryTotal, teamLifetimeTotal } from '../../lib/scoring';
+import { mostRecentTeamEntry, nextTeamStrokes, teamEntryTotal, teamLifetimeTotal } from '../../lib/scoring';
 import { computeTeamStats } from '../../lib/stats';
 import { useStore } from '../../lib/store';
 
@@ -34,7 +34,9 @@ export default function TeamDetailScreen() {
   const stats = useMemo(() => computeTeamStats(entries), [entries]);
 
   const [partnerName, setPartnerName] = useState(team?.partnerName ?? '');
-  const [defaultStrokesText, setDefaultStrokesText] = useState(formatSigned(team?.defaultStrokes ?? 0));
+  const [defaultStrokesText, setDefaultStrokesText] = useState(
+    team?.defaultStrokes !== undefined ? formatSigned(team.defaultStrokes) : ''
+  );
   const [montoApuesta, setMontoApuesta] = useState(team?.montoApuesta ?? '');
   const [montoMarcas, setMontoMarcas] = useState(team?.montoMarcas ?? '');
   const [montoMedal, setMontoMedal] = useState(team?.montoMedal ?? '');
@@ -54,7 +56,7 @@ export default function TeamDetailScreen() {
   const positive = total >= 0;
 
   const handleAddEntry = () => {
-    const lastEntry = entries[0];
+    const lastEntry = mostRecentTeamEntry(allEntries, team.id);
     const initialStrokes = lastEntry ? nextTeamStrokes(lastEntry) : team.defaultStrokes ?? 0;
     const entry = addTeamEntry(team.id, todayISO(), initialStrokes);
     router.push(`/teamEntry/${entry.id}`);
@@ -102,7 +104,6 @@ export default function TeamDetailScreen() {
         <TextInput
           style={styles.input}
           keyboardType="numbers-and-punctuation"
-          placeholder="0"
           placeholderTextColor={colors.textMuted}
           value={defaultStrokesText}
           onChangeText={(t) => {
@@ -110,14 +111,15 @@ export default function TeamDetailScreen() {
             const n = parseFloat(t);
             updateTeam(team.id, { defaultStrokes: Number.isFinite(n) ? n : 0 });
           }}
-          onBlur={() => setDefaultStrokesText(formatSigned(team.defaultStrokes ?? 0))}
+          onBlur={() =>
+            setDefaultStrokesText(team.defaultStrokes !== undefined ? formatSigned(team.defaultStrokes) : '')
+          }
         />
         <Text style={styles.hint}>Positivo = tu equipo recibe strokes. Negativo = tu equipo da strokes.</Text>
 
         <Text style={styles.label}>Monto Apuesta</Text>
         <TextInput
           style={styles.input}
-          placeholder="$50 $50 $100"
           placeholderTextColor={colors.textMuted}
           value={montoApuesta}
           onChangeText={(t) => {
@@ -129,7 +131,6 @@ export default function TeamDetailScreen() {
         <Text style={styles.label}>Monto Marcas</Text>
         <TextInput
           style={styles.input}
-          placeholder="$25"
           placeholderTextColor={colors.textMuted}
           value={montoMarcas}
           onChangeText={(t) => {
@@ -141,7 +142,6 @@ export default function TeamDetailScreen() {
         <Text style={styles.label}>Monto Medal</Text>
         <TextInput
           style={styles.input}
-          placeholder="$10"
           placeholderTextColor={colors.textMuted}
           value={montoMedal}
           onChangeText={(t) => {
@@ -153,7 +153,6 @@ export default function TeamDetailScreen() {
         <Text style={styles.label}>Notas</Text>
         <TextInput
           style={styles.input}
-          placeholder="Carry no se ajusta"
           placeholderTextColor={colors.textMuted}
           value={notas}
           onChangeText={(t) => {

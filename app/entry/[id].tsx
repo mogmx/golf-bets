@@ -1,6 +1,6 @@
-import { Stack, useLocalSearchParams } from 'expo-router';
+import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
 import { useState } from 'react';
-import { ScrollView, StyleSheet, Switch, Text, TextInput, View } from 'react-native';
+import { Keyboard, ScrollView, StyleSheet, Switch, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { DatePickerField } from '../../components/DatePickerField';
 import { HeaderActions } from '../../components/HeaderActions';
 import { colors } from '../../lib/colors';
@@ -23,14 +23,13 @@ function NumberField({
   onChangeValue: (n: number) => void;
   signed?: boolean;
 }) {
-  const [text, setText] = useState(signed ? formatSigned(value) : String(value));
+  const [text, setText] = useState(value === 0 ? '' : signed ? formatSigned(value) : String(value));
   return (
     <View style={{ flex: 1 }}>
       <Text style={styles.label}>{label}</Text>
       <TextInput
         style={styles.input}
         keyboardType={signed ? 'numbers-and-punctuation' : 'decimal-pad'}
-        placeholder="0"
         placeholderTextColor={colors.textMuted}
         value={text}
         onChangeText={(t) => {
@@ -38,7 +37,7 @@ function NumberField({
           const n = parseFloat(t);
           onChangeValue(Number.isFinite(n) ? n : 0);
         }}
-        onBlur={() => setText(signed ? formatSigned(value) : String(value))}
+        onBlur={() => setText(value === 0 ? '' : signed ? formatSigned(value) : String(value))}
       />
     </View>
   );
@@ -58,6 +57,7 @@ function ToggleRow({ label, value, onChange }: { label: string; value: boolean; 
 
 export default function EntryScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
+  const router = useRouter();
 
   const entry = useStore((s) => s.entries.find((e) => e.id === id));
   const friend = useStore((s) => s.friends.find((f) => f.id === entry?.friendId));
@@ -75,20 +75,27 @@ export default function EntryScreen() {
   const total = entryTotal(entry);
   const positive = total >= 0;
 
+  const handleDone = () => {
+    Keyboard.dismiss();
+    router.replace('/');
+  };
+
   return (
     <ScrollView style={styles.container} keyboardShouldPersistTaps="handled">
       <Stack.Screen options={{ headerRight: () => <HeaderActions /> }} />
-      <ToggleRow
-        label="Carry Ajusta Strokes"
-        value={!!entry.carryAjusta}
-        onChange={(v) => patch({ carryAjusta: v })}
-      />
-
       <Text style={styles.title}>vs {friend?.name ?? 'Amigo'}</Text>
 
       <DatePickerField value={entry.fecha} onChange={(iso) => patch({ fecha: iso })} />
 
       <ToggleRow label="Match" value={entry.match} onChange={(v) => patch({ match: v })} />
+
+      <ToggleRow label="Carry" value={entry.carry} onChange={(v) => patch({ carry: v })} />
+
+      <ToggleRow
+        label="Carry Ajusta Strokes"
+        value={!!entry.carryAjusta}
+        onChange={(v) => patch({ carryAjusta: v })}
+      />
 
       <Text style={styles.sectionTitle}>Strokes</Text>
       <NumberField label="Strokes" value={entry.strokes} onChangeValue={(n) => patch({ strokes: n })} signed />
@@ -126,8 +133,6 @@ export default function EntryScreen() {
         />
       </View>
 
-      <ToggleRow label="Carry" value={entry.carry} onChange={(v) => patch({ carry: v })} />
-
       <View style={styles.totalRow}>
         <Text style={styles.totalLabel}>Total</Text>
         <Text style={[styles.totalValue, { color: positive ? colors.positive : colors.negative }]}>
@@ -143,6 +148,10 @@ export default function EntryScreen() {
           ? `Carry (sin ajustar): los strokes no se ajustan (siguen en ${entry.strokes >= 0 ? '+' : ''}${entry.strokes}).`
           : `Próxima entrada sugerida: ${nextStrokes(entry) >= 0 ? '+' : ''}${nextStrokes(entry)} strokes`}
       </Text>
+
+      <TouchableOpacity style={styles.doneButton} onPress={handleDone}>
+        <Text style={styles.doneButtonText}>Listo</Text>
+      </TouchableOpacity>
 
       <View style={{ height: 40 }} />
     </ScrollView>
@@ -184,4 +193,12 @@ const styles = StyleSheet.create({
   },
   totalLabel: { fontSize: 16, fontWeight: '700', color: colors.text },
   totalValue: { fontSize: 20, fontWeight: '800' },
+  doneButton: {
+    backgroundColor: colors.primary,
+    borderRadius: 8,
+    paddingVertical: 14,
+    alignItems: 'center',
+    marginTop: 20,
+  },
+  doneButtonText: { color: '#fff', fontWeight: '700', fontSize: 16 },
 });
