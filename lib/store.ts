@@ -13,7 +13,9 @@ type Store = {
   addFriend: (name: string) => Friend;
   updateFriend: (
     id: string,
-    patch: Partial<Pick<Friend, 'name' | 'hcp' | 'defaultStrokes' | 'montoApuesta' | 'montoMarcas' | 'montoMedal' | 'notas'>>
+    patch: Partial<
+      Pick<Friend, 'name' | 'hcp' | 'defaultStrokes' | 'montoApuesta' | 'montoMarcas' | 'montoMedal' | 'montoSkins' | 'notas'>
+    >
   ) => void;
   deleteFriend: (id: string) => void;
 

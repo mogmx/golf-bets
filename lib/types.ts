@@ -6,6 +6,7 @@ export type Friend = {
   montoApuesta?: string; // reference note, e.g. "$50 $50 $100"
   montoMarcas?: string; // reference note, e.g. "$25"
   montoMedal?: string; // reference note, e.g. "$10"
+  montoSkins?: string; // reference note
   notas?: string; // e.g. "Carry no se ajusta"
 };
 

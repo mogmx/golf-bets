@@ -47,6 +47,7 @@ export default function FriendDetailScreen() {
   const [montoApuesta, setMontoApuesta] = useState(friend?.montoApuesta ?? '');
   const [montoMarcas, setMontoMarcas] = useState(friend?.montoMarcas ?? '');
   const [montoMedal, setMontoMedal] = useState(friend?.montoMedal ?? '');
+  const [montoSkins, setMontoSkins] = useState(friend?.montoSkins ?? '');
   const [notas, setNotas] = useState(friend?.notas ?? '');
 
   if (!friend) {
@@ -142,6 +143,17 @@ export default function FriendDetailScreen() {
           onChangeText={(t) => {
             setMontoMedal(t);
             updateFriend(friend.id, { montoMedal: t });
+          }}
+        />
+
+        <Text style={styles.label}>Monto Skins</Text>
+        <TextInput
+          style={styles.input}
+          placeholderTextColor={colors.textMuted}
+          value={montoSkins}
+          onChangeText={(t) => {
+            setMontoSkins(t);
+            updateFriend(friend.id, { montoSkins: t });
           }}
         />
 
