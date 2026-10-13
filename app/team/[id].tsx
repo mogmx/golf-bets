@@ -52,6 +52,9 @@ export default function TeamDetailScreen() {
 
   const opponent1 = friends.find((f) => f.id === team.opponent1Id);
   const opponent2 = friends.find((f) => f.id === team.opponent2Id);
+  const [sortedOpponentA, sortedOpponentB] = [opponent1, opponent2].sort((a, b) =>
+    (a?.name ?? '?').localeCompare(b?.name ?? '?')
+  );
   const total = teamLifetimeTotal(allEntries, team.id);
   const positive = total >= 0;
 
@@ -75,12 +78,12 @@ export default function TeamDetailScreen() {
       <ScrollView keyboardShouldPersistTaps="handled">
         <View style={styles.nameRow}>
           <Text style={styles.name}>vs </Text>
-          <TouchableOpacity onPress={() => opponent1 && router.push(`/friend/${opponent1.id}`)}>
-            <Text style={[styles.name, styles.nameLink]}>{opponent1?.name ?? '?'}</Text>
+          <TouchableOpacity onPress={() => sortedOpponentA && router.push(`/friend/${sortedOpponentA.id}`)}>
+            <Text style={[styles.name, styles.nameLink]}>{sortedOpponentA?.name ?? '?'}</Text>
           </TouchableOpacity>
           <Text style={styles.name}> & </Text>
-          <TouchableOpacity onPress={() => opponent2 && router.push(`/friend/${opponent2.id}`)}>
-            <Text style={[styles.name, styles.nameLink]}>{opponent2?.name ?? '?'}</Text>
+          <TouchableOpacity onPress={() => sortedOpponentB && router.push(`/friend/${sortedOpponentB.id}`)}>
+            <Text style={[styles.name, styles.nameLink]}>{sortedOpponentB?.name ?? '?'}</Text>
           </TouchableOpacity>
         </View>
         <Text style={[styles.total, { color: positive ? colors.positive : colors.negative }]}>

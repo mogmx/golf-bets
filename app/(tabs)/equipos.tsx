@@ -27,11 +27,12 @@ export default function EquiposScreen() {
         .map((t) => {
           const opponent1 = friends.find((f) => f.id === t.opponent1Id);
           const opponent2 = friends.find((f) => f.id === t.opponent2Id);
-          const opponentNames = [opponent1?.name ?? '', opponent2?.name ?? ''].sort((a, b) => a.localeCompare(b));
+          const opponentNames = [opponent1?.name ?? '?', opponent2?.name ?? '?'].sort((a, b) => a.localeCompare(b));
           return {
             team: t,
             opponent1,
             opponent2,
+            opponentNames,
             sortKey: opponentNames.join(' '),
             total: teamLifetimeTotal(teamEntries, t.id),
             strokes: currentTeamStrokes(teamEntries, t.id, t.defaultStrokes ?? 0),
@@ -117,7 +118,7 @@ export default function EquiposScreen() {
             >
               <View>
                 <Text style={styles.rowName}>
-                  vs {item.opponent1?.name ?? '?'} & {item.opponent2?.name ?? '?'}
+                  vs {item.opponentNames[0]} & {item.opponentNames[1]}
                 </Text>
                 <Text style={styles.rowSub}>Tu pareja: {item.team.partnerName}</Text>
                 <Text style={styles.rowSub}>

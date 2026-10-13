@@ -174,12 +174,13 @@ export default function FriendDetailScreen() {
             {relatedTeams.map((t) => {
               const otherId = t.opponent1Id === id ? t.opponent2Id : t.opponent1Id;
               const other = friends.find((f) => f.id === otherId);
+              const [nameA, nameB] = [friend.name, other?.name ?? '?'].sort((a, b) => a.localeCompare(b));
               const teamTotal = teamLifetimeTotal(teamEntries, t.id);
               const teamPositive = teamTotal >= 0;
               return (
                 <TouchableOpacity key={t.id} style={styles.teamLinkRow} onPress={() => router.push(`/team/${t.id}`)}>
                   <Text style={styles.teamLinkName}>
-                    Tú y {t.partnerName} vs {friend.name} & {other?.name ?? '?'}
+                    Tú y {t.partnerName} vs {nameA} & {nameB}
                   </Text>
                   <Text style={[styles.teamLinkTotal, { color: teamPositive ? colors.positive : colors.negative }]}>
                     {teamPositive ? '+' : ''}
