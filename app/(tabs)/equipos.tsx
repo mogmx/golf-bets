@@ -23,15 +23,21 @@ export default function EquiposScreen() {
 
   const teamRows = useMemo(
     () =>
-      [...teams]
-        .sort((a, b) => a.partnerName.localeCompare(b.partnerName))
-        .map((t) => ({
-          team: t,
-          opponent1: friends.find((f) => f.id === t.opponent1Id),
-          opponent2: friends.find((f) => f.id === t.opponent2Id),
-          total: teamLifetimeTotal(teamEntries, t.id),
-          strokes: currentTeamStrokes(teamEntries, t.id, t.defaultStrokes ?? 0),
-        })),
+      teams
+        .map((t) => {
+          const opponent1 = friends.find((f) => f.id === t.opponent1Id);
+          const opponent2 = friends.find((f) => f.id === t.opponent2Id);
+          const opponentNames = [opponent1?.name ?? '', opponent2?.name ?? ''].sort((a, b) => a.localeCompare(b));
+          return {
+            team: t,
+            opponent1,
+            opponent2,
+            sortKey: opponentNames.join(' '),
+            total: teamLifetimeTotal(teamEntries, t.id),
+            strokes: currentTeamStrokes(teamEntries, t.id, t.defaultStrokes ?? 0),
+          };
+        })
+        .sort((a, b) => a.sortKey.localeCompare(b.sortKey)),
     [teams, friends, teamEntries]
   );
 
@@ -48,6 +54,11 @@ export default function EquiposScreen() {
   const handleAddNewFriend = () => {
     const name = newFriendName.trim();
     if (!name) return;
+    const existing = friends.find((f) => f.name.trim().toLowerCase() === name.toLowerCase());
+    if (existing) {
+      showAlert('Amigo ya existe', `Ya existe un amigo llamado "${name}".`);
+      return;
+    }
     const friend = addFriend(name);
     if (!opponent1Id) setOpponent1Id(friend.id);
     else if (!opponent2Id) setOpponent2Id(friend.id);
@@ -69,6 +80,15 @@ export default function EquiposScreen() {
   const handleCreate = () => {
     if (!partnerName.trim() || !opponent1Id || !opponent2Id) {
       showAlert('Faltan datos', 'Ingresa tu pareja y selecciona 2 oponentes.');
+      return;
+    }
+    const duplicate = teams.some(
+      (t) =>
+        (t.opponent1Id === opponent1Id && t.opponent2Id === opponent2Id) ||
+        (t.opponent1Id === opponent2Id && t.opponent2Id === opponent1Id)
+    );
+    if (duplicate) {
+      showAlert('Equipo ya existe', 'Ya existe un equipo con estos dos contrincantes.');
       return;
     }
     const team = addTeam(partnerName.trim(), opponent1Id, opponent2Id);

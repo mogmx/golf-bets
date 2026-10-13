@@ -132,6 +132,19 @@ export default function EntryScreen() {
           onChangeValue={(n) => patch({ medalPerdido: n })}
         />
       </View>
+      <View style={{ height: 8 }} />
+      <View style={styles.row2}>
+        <NumberField
+          label="Skins Ganado ($)"
+          value={entry.skinsGanado}
+          onChangeValue={(n) => patch({ skinsGanado: n })}
+        />
+        <NumberField
+          label="Skins Perdido ($)"
+          value={entry.skinsPerdido}
+          onChangeValue={(n) => patch({ skinsPerdido: n })}
+        />
+      </View>
 
       <View style={styles.totalRow}>
         <Text style={styles.totalLabel}>Total</Text>

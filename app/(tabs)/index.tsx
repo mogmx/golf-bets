@@ -2,7 +2,7 @@ import { useRouter } from 'expo-router';
 import { useMemo, useState } from 'react';
 import { FlatList, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { colors } from '../../lib/colors';
-import { confirmDelete } from '../../lib/confirm';
+import { confirmDelete, showAlert } from '../../lib/confirm';
 import { currentStrokes, friendLifetimeTotal } from '../../lib/scoring';
 import { useStore } from '../../lib/store';
 
@@ -32,6 +32,11 @@ export default function FriendsScreen() {
   const handleAdd = () => {
     const name = newName.trim();
     if (!name) return;
+    const exists = friends.some((f) => f.name.trim().toLowerCase() === name.toLowerCase());
+    if (exists) {
+      showAlert('Amigo ya existe', `Ya existe un amigo llamado "${name}".`);
+      return;
+    }
     const friend = addFriend(name);
     setNewName('');
     router.push(`/friend/${friend.id}`);

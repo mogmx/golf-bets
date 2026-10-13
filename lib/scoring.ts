@@ -5,7 +5,8 @@ export function entryTotal(entry: Entry): number {
     entry.ganado -
     entry.perdido +
     (entry.marcasGanado - entry.marcasPerdido) +
-    (entry.medalGanado - entry.medalPerdido)
+    (entry.medalGanado - entry.medalPerdido) +
+    (entry.skinsGanado - entry.skinsPerdido)
   );
 }
 

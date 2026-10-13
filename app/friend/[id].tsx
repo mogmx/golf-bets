@@ -235,6 +235,15 @@ export default function FriendDetailScreen() {
             <Text style={styles.statLabel}>Total Medal</Text>
           </View>
           <View style={styles.statBox}>
+            <Text style={[styles.statValue, { color: stats.skinsBalance >= 0 ? colors.positive : colors.negative }]}>
+              {stats.skinsBalance >= 0 ? '+' : ''}
+              {stats.skinsBalance.toFixed(2)}
+            </Text>
+            <Text style={styles.statLabel}>Total Skins</Text>
+          </View>
+        </View>
+        <View style={styles.statsRow}>
+          <View style={styles.statBox}>
             <Text style={[styles.statValue, { color: stats.totalBalance >= 0 ? colors.positive : colors.negative }]}>
               {stats.totalBalance >= 0 ? '+' : ''}
               {stats.totalBalance.toFixed(2)}
@@ -270,10 +279,22 @@ export default function FriendDetailScreen() {
               >
                 <View style={styles.entryHeaderRow}>
                   <Text style={styles.entryDate}>{formatDate(item.fecha)}</Text>
-                  <Text style={[styles.entryTotal, { color: pos ? colors.positive : colors.negative }]}>
-                    {pos ? '+' : ''}
-                    {t.toFixed(2)}
-                  </Text>
+                  <View style={styles.entryHeaderRight}>
+                    <Text style={[styles.entryTotal, { color: pos ? colors.positive : colors.negative }]}>
+                      {pos ? '+' : ''}
+                      {t.toFixed(2)}
+                    </Text>
+                    <TouchableOpacity
+                      style={styles.entryDeleteButton}
+                      onPress={() =>
+                        confirmDelete('Eliminar entrada', `¿Eliminar la entrada del ${formatDate(item.fecha)}?`, () =>
+                          deleteEntry(item.id)
+                        )
+                      }
+                    >
+                      <Text style={styles.entryDeleteText}>✕</Text>
+                    </TouchableOpacity>
+                  </View>
                 </View>
                 <View style={styles.entryDetailsRow}>
                   <Text style={styles.entryDetail}>
@@ -289,6 +310,10 @@ export default function FriendDetailScreen() {
                   <Text style={styles.entryDetail}>
                     Medal: {item.medalGanado - item.medalPerdido >= 0 ? '+' : ''}
                     {(item.medalGanado - item.medalPerdido).toFixed(2)}
+                  </Text>
+                  <Text style={styles.entryDetail}>
+                    Skins: {item.skinsGanado - item.skinsPerdido >= 0 ? '+' : ''}
+                    {(item.skinsGanado - item.skinsPerdido).toFixed(2)}
                   </Text>
                   <Text style={styles.entryDetail}>Carry: {item.carry ? 'SI' : 'NO'}</Text>
                   {item.carry && (
@@ -363,7 +388,10 @@ const styles = StyleSheet.create({
   },
   entryHeaderRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
   entryDate: { fontSize: 15, fontWeight: '700', color: colors.text },
+  entryHeaderRight: { flexDirection: 'row', alignItems: 'center', gap: 10 },
   entryTotal: { fontSize: 16, fontWeight: '800' },
+  entryDeleteButton: { padding: 4 },
+  entryDeleteText: { color: colors.danger, fontWeight: '700', fontSize: 16 },
   entryDetailsRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 10, marginTop: 6 },
   entryDetail: { fontSize: 12, color: colors.textMuted },
   newButton: { backgroundColor: colors.primary, borderRadius: 8, paddingVertical: 14, alignItems: 'center', marginTop: 8 },

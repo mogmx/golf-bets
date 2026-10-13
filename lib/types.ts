@@ -24,6 +24,8 @@ export type Entry = {
   marcasPerdido: number;
   medalGanado: number;
   medalPerdido: number;
+  skinsGanado: number;
+  skinsPerdido: number;
 
   carry: boolean; // SI/NO
   carryAjusta?: boolean; // SI/NO - if a carry happened, whether strokes still slide (default NO = don't adjust)

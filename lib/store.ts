@@ -83,6 +83,8 @@ export const useStore = create<Store>()(
           marcasPerdido: 0,
           medalGanado: 0,
           medalPerdido: 0,
+          skinsGanado: 0,
+          skinsPerdido: 0,
           carry: false,
           carryAjusta: false,
         };
@@ -140,7 +142,7 @@ export const useStore = create<Store>()(
     {
       name: 'golf-bets-storage-v3',
       storage: createJSONStorage(() => AsyncStorage),
-      version: 2,
+      version: 3,
       migrate: (persistedState: any, version) => {
         if (version < 2) {
           const migrateEntries = (entries: any[]) =>
@@ -153,6 +155,13 @@ export const useStore = create<Store>()(
             }));
           persistedState.entries = migrateEntries(persistedState.entries);
           persistedState.teamEntries = migrateEntries(persistedState.teamEntries);
+        }
+        if (version < 3) {
+          persistedState.entries = (persistedState.entries ?? []).map((e: any) => ({
+            ...e,
+            skinsGanado: e.skinsGanado ?? 0,
+            skinsPerdido: e.skinsPerdido ?? 0,
+          }));
         }
         return persistedState;
       },
