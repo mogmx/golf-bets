@@ -37,7 +37,11 @@ export default function EquiposScreen() {
             strokes: currentTeamStrokes(teamEntries, t.id, t.defaultStrokes ?? 0),
           };
         })
-        .sort((a, b) => a.team.partnerName.localeCompare(b.team.partnerName)),
+        .sort((a, b) => {
+          const partnerCompare = a.team.partnerName.localeCompare(b.team.partnerName);
+          if (partnerCompare !== 0) return partnerCompare;
+          return a.opponentNames.join(' ').localeCompare(b.opponentNames.join(' '));
+        }),
     [teams, friends, teamEntries]
   );
 
