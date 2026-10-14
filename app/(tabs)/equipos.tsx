@@ -33,12 +33,11 @@ export default function EquiposScreen() {
             opponent1,
             opponent2,
             opponentNames,
-            sortKey: opponentNames.join(' '),
             total: teamLifetimeTotal(teamEntries, t.id),
             strokes: currentTeamStrokes(teamEntries, t.id, t.defaultStrokes ?? 0),
           };
         })
-        .sort((a, b) => a.sortKey.localeCompare(b.sortKey)),
+        .sort((a, b) => a.team.partnerName.localeCompare(b.team.partnerName)),
     [teams, friends, teamEntries]
   );
 
