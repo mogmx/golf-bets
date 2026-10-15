@@ -88,8 +88,9 @@ export default function EquiposScreen() {
     }
     const duplicate = teams.some(
       (t) =>
-        (t.opponent1Id === opponent1Id && t.opponent2Id === opponent2Id) ||
-        (t.opponent1Id === opponent2Id && t.opponent2Id === opponent1Id)
+        t.partnerName.trim().toLowerCase() === partnerName.trim().toLowerCase() &&
+        ((t.opponent1Id === opponent1Id && t.opponent2Id === opponent2Id) ||
+          (t.opponent1Id === opponent2Id && t.opponent2Id === opponent1Id))
     );
     if (duplicate) {
       showAlert('Equipo ya existe', 'Ya existe un equipo con estos dos contrincantes.');
